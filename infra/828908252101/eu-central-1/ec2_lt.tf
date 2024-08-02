@@ -1,7 +1,7 @@
 resource "aws_key_pair" "admin" {
-    key_name = "admin"
-    # TODO: Generate a public key on-the-fly
-    public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBOvyU9FzqovrUUq4oCapmrayYJBIkPeEahFuP+LkPcv elk-stack-poc"
+  key_name = "admin"
+  # TODO: Generate a public key on-the-fly
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBOvyU9FzqovrUUq4oCapmrayYJBIkPeEahFuP+LkPcv elk-stack-poc"
 }
 
 resource "aws_launch_template" "k3s" {
@@ -15,10 +15,10 @@ resource "aws_launch_template" "k3s" {
     }
   }
 
-  image_id = "ami-0ba9883b710b05ac6" # Amazon Linux 2023
+  image_id = "ami-013efd7d9f40467af" # Amazon Linux 2023
 
-# TODO: Uncomment when EC2 instances are stable
-#   instance_initiated_shutdown_behavior = "terminate"
+  # TODO: Uncomment when EC2 instances are stable
+  #   instance_initiated_shutdown_behavior = "terminate"
 
   instance_type = "t2.micro"
 
@@ -35,9 +35,9 @@ resource "aws_launch_template" "k3s" {
     enabled = true
   }
 
-# TODO: Add SG when ready
-#   vpc_security_group_ids = ["sg-12345678"]
+  # TODO: Add SG when ready
+  vpc_security_group_ids = [aws_security_group.asg.id]
 
-# TODO: Provide script to create/join the cluster
-#   user_data = filebase64("${path.module}/example.sh")
+  # TODO: Provide script to create/join the cluster
+  #   user_data = filebase64("${path.module}/example.sh")
 }
