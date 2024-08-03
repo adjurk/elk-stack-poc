@@ -20,7 +20,7 @@ resource "aws_launch_template" "k3s" {
   # TODO: Uncomment when EC2 instances are stable
   #   instance_initiated_shutdown_behavior = "terminate"
 
-  instance_type = "t2.micro"
+  instance_type = "r6a.large"
 
   key_name = aws_key_pair.admin.key_name
 

@@ -13,10 +13,10 @@ Goal: Deploy a sample ELK (ElasticSearch, Logstash, Kibana) stack on AWS with as
 - [ ] k3s
   - [ ] Fluent Bit as DaemonSet (instead of Logstash)
   	- [ ] Metrics enabled
-  - [ ] ElasticSearch
-  - [ ] Logstash
+  - [x] ElasticSearch
+  - [x] Logstash
   	- [ ] Blacklist/Transform logs
-  - [ ] Kibana
+  - [x] Kibana
   	- [ ] Dashboards (template must be in repo)
   - [ ] Grafana
   	- [ ] Fluent Bit dashboard imported/in repo
@@ -34,6 +34,7 @@ Goal: Deploy a sample ELK (ElasticSearch, Logstash, Kibana) stack on AWS with as
 	- `GET /health` API
 - [x] 100% IaC
 - [ ] Terraform remote state
+- [ ] Configure domains
 
 **Nice-to-haves**:
 - [ ] CI/CD to deploy infra
