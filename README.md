@@ -37,5 +37,5 @@ Goal: Deploy a sample ELK (ElasticSearch, Logstash, Kibana) stack on AWS with as
 
 **Nice-to-haves**:
 - [ ] CI/CD to deploy infra
-- [ ] Signed Git commits
+- [x] Signed Git commits
 - [ ] AWS Pricing Calculator estimate

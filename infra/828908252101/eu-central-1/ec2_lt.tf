@@ -35,8 +35,10 @@ resource "aws_launch_template" "k3s" {
     enabled = true
   }
 
-  # TODO: Add SG when ready
-  vpc_security_group_ids = [aws_security_group.asg.id]
+  network_interfaces {
+    associate_public_ip_address = true
+    security_groups = [aws_security_group.public_asg.id]
+  }
 
   # TODO: Provide script to create/join the cluster
   #   user_data = filebase64("${path.module}/example.sh")
