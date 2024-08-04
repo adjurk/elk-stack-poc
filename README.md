@@ -5,13 +5,13 @@ Goal: Deploy a sample ELK (ElasticSearch, Logstash, Kibana) stack on AWS with as
 ## Components
 
 **Assumptions:**
-- **Minimal cost possible** - use AWS Free Tier, `destroy` resources when not in use and recreate thanks to IaC
+- **Minimal cost possible** - avoid costly services (e.g. simple k3s cluster instead of charging for EKS), `destroy` resources when not in use and recreate thanks to IaC
 - **Medium ops overhead** - implementing in k3s but with IaC where possible for a simple `apply`
+- **Fast provisioning** - ready within 5 minutes
 
 **Must-haves:**
-- [ ] Sample Python app writing logs to container stdout in a loop
 - [ ] k3s
-  - [ ] Fluent Bit as DaemonSet (instead of Logstash)
+  - [x] Filebeat as DaemonSet
   	- [ ] Metrics enabled
   - [x] ElasticSearch
   - [x] Logstash
@@ -26,17 +26,20 @@ Goal: Deploy a sample ELK (ElasticSearch, Logstash, Kibana) stack on AWS with as
   - [x] EC2 Launch Template
   - [x] Basic VPC setup
   - [x] ASG
-- [ ] README - scope, design decisions
+- [x] README - scope, design decisions
 
 **Could-haves**:
 - [ ] HLD diagram in AWS
 - [ ] Python app:
+	- Sample Python app writing logs to container stdout in a loop
 	- `GET /health` API
-- [x] 100% IaC
-- [ ] Terraform remote state
+- [ ] 100% IaC
+  - [ ] Automated cluster setup
+- [ ] Proper Ingress (instead of port forward)
 - [ ] Configure domains
 
 **Nice-to-haves**:
 - [ ] CI/CD to deploy infra
 - [x] Signed Git commits
 - [ ] AWS Pricing Calculator estimate
+- [ ] Terraform remote state

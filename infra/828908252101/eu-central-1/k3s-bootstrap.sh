@@ -3,7 +3,7 @@
 # Install prerequisites for k3s-selinux policy
 dnf install -y container-selinux \
     && dnf install -y https://github.com/k3s-io/k3s-selinux/releases/download/v1.5.stable.1/k3s-selinux-1.5-1.el8.noarch.rpm \
-    && dnf install -y htop
+    && dnf install -y htop git
 
 # TODO: Install k3s server/agent (based on instance tags?)
 

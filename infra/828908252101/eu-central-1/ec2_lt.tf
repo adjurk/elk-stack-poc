@@ -8,7 +8,7 @@ resource "aws_launch_template" "k3s" {
   name = "ec2-lt-k3s"
 
   block_device_mappings {
-    device_name = "/dev/sdf"
+    device_name = "/dev/xvda"
 
     ebs {
       volume_size = 30
