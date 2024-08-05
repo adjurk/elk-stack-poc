@@ -17,7 +17,7 @@ Goal: Deploy a sample ELK (ElasticSearch, Logstash, Kibana) stack on AWS with as
   - [x] Logstash
   	- [ ] Blacklist/Transform logs
   - [x] Kibana
-  	- [ ] Dashboards (template must be in repo)
+  	- [x] Dashboards (template must be in repo)
   - [ ] Grafana
   	- [ ] Fluent Bit dashboard imported/in repo
   - [ ] Prometheus
@@ -43,3 +43,11 @@ Goal: Deploy a sample ELK (ElasticSearch, Logstash, Kibana) stack on AWS with as
 - [x] Signed Git commits
 - [ ] AWS Pricing Calculator estimate
 - [ ] Terraform remote state
+
+## Prerequisites
+
+- 
+
+## Running
+
+### Deploy base AWS resources
