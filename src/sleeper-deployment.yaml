@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sleeper
+  name: sleeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sleeper
+  template:
+    metadata:
+      labels:
+        app: sleeper
+    spec:
+      containers:
+      - image: ajurkiewicz/sleeper:latest
+        imagePullPolicy: Always
+        name: sleeper
+        env:
+        - name: WAIT_TIME_MIN
+          value: "10"
+        - name: WAIT_TIME_MAX
+          value: "20"
+        resources:
+          limits:
+            cpu: 0.5
+            memory: 256Mi
+          requests:
+            cpu: 0.1
+            memory: 128Mi

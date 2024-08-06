@@ -8,6 +8,7 @@ Goal: Deploy a sample ELK (ElasticSearch, Logstash, Kibana) stack on AWS with as
 - **Minimal cost possible** - avoid costly services (e.g. simple k3s cluster instead of charging for EKS), `destroy` resources when not in use and recreate thanks to IaC
 - **Medium ops overhead** - implementing in k3s but with IaC where possible for a simple `apply`
 - **Fast provisioning** - ready within 5 minutes
+- **Built for scale** - can go from serving 10 to 1000 clients with horizontal scaling
 
 **Must-haves:**
 - [ ] k3s
@@ -30,8 +31,8 @@ Goal: Deploy a sample ELK (ElasticSearch, Logstash, Kibana) stack on AWS with as
 
 **Could-haves**:
 - [ ] HLD diagram in AWS
-- [ ] Python app:
-	- Sample Python app writing logs to container stdout in a loop
+- [x] Python app:
+	- Sample Python app writing JSON logs to container stdout in a loop
 	- `GET /health` API
 - [ ] 100% IaC
   - [ ] Automated cluster setup
