@@ -9,8 +9,10 @@ This repo will guide you through setting up an ELK stack on AWS hosted on k3s, m
 **Assumptions:**
 - **Minimal cost possible** - avoid costly services (e.g. simple k3s cluster instead of charging for EKS), `destroy` resources when not in use and recreate thanks to IaC
 - **Medium ops overhead** - implementing in k3s but with IaC where possible for a simple `apply`
-- **Fast provisioning** - ready within 5 minutes
-- **Built for scale** - can go from serving 10 to 1000 clients with horizontal scaling
+- **Fast provisioning** - infra ready within 5 minutes, easy app deployment
+- **Built with scaling in mind** - can scale from serving 10 to 1000 clients by scaling in/out and up/down
+
+Here are some of the ideas for this project:
 
 **Must-haves:**
 - [x] k3s
@@ -43,15 +45,21 @@ This repo will guide you through setting up an ELK stack on AWS hosted on k3s, m
 
 **Nice-to-haves**:
 - [ ] CI/CD to deploy infra
-- [x] Signed Git commits
 - [ ] AWS Pricing Calculator estimate
 - [ ] Terraform remote state
 
 ## Prerequisites
 
 - An AWS account with IAM permissions capable of provisioning resources defined in the infra directory
+- Latest version of the Terraform CLI for provisioning the infrastructure
 
 ## Running
+
+Deploying this demo boils down to:
+1. Deploying base AWS resources
+2. Installing k3s (a lightweight Kubernetes distro)
+3. Deploying the ELK stack with ECK (Elastic Cloud for Kubernetes)
+4. Deploying additional monitoring with Prometheus and Grafana
 
 ### Deploy base AWS resources
 
@@ -62,12 +70,16 @@ First step is to deploy the neccessary infrastructure:
 
 ```bash
 cd infra
+
 # Initialize the backend & provider
 terraform init
+
 # Add your IP to tfvars which will be applied to an Ingress Rules for the EC2 Security Group
 echo "ingress_allowed_ip_cidr = \""$(curl -s ip.me)"/32\"" > secret.tfvars
+
 # Run a plan and check what resources would be provisioned
 terraform plan -var-file='secret.tfvars'
+
 # Apply the infrastructure and wait until it's complete (should take ~2-5 min)
 terraform apply -var-file='secret.tfvars'
 ```
@@ -96,6 +108,7 @@ Now you can install k3s on 1+ agent nodes and join the cluster:
 dnf install -y container-selinux \
     && dnf install -y https://github.com/k3s-io/k3s-selinux/releases/download/v1.5.stable.1/k3s-selinux-1.5-1.el8.noarch.rpm \
     && dnf install -y htop git
+
 # Replace x.x.x.x with the private IP address of the server node
 # Replace K3S_TOKEN value with the node token
 curl -sfL https://get.k3s.io | K3S_URL=https://x.x.x.x:6443 K3S_TOKEN=<TOKEN_HERE> sh -
@@ -119,8 +132,7 @@ kubectl rollout restart deployment/coredns -n kube-system
 
 ### Deploy the ELK stack with ECK Cloud on Kubernetes
 
-> Based on:
-> - [Elastic Docs - Elastic Cloud on Kubernetes - Quickstart](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-deploy-eck.html)
+> Based on: [Elastic Docs - Elastic Cloud on Kubernetes - Quickstart](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-deploy-eck.html)
 
 [Elastic Cloud on Kubernetes](https://www.elastic.co/elastic-cloud-kubernetes) allows for easy provisioning of the ELK stack with ECK CRDs and the ECK Operator maintaining desired state.
 
@@ -141,13 +153,13 @@ helm install eck-stack-with-logstash elastic/eck-stack \
     --values eck-values.yaml -n elastic-stack --create-namespace
 ```
 
-After installing ELK, you can use a port forward as [a workaround](#wishlist) for accessing the service:
+After installing ELK, you can use a port forward as [a workaround](#wishlist) for accessing Kibana:
 
 ```bash
 screen -dmS port-fw-kibana kubectl port-forward svc/eck-stack-with-logstash-eck-kibana-kb-http --address 0.0.0.0 3000:80 -n elastic-stack
 ```
 
-Kibana should now be accessible via port `:5601` (mind the Security Group rule).
+It should now be accessible via port `:5601` (mind the Security Group rule).
 
 You can also deploy the `ajurkiewicz/sleeper` image to ingest sample logs with Filebeat into Logstash and ElasticSearch:
 
@@ -158,14 +170,13 @@ kubectl apply -f sleeper-deployment.yaml
 
 There's a sample dashboard available in the `infra/kibana` directory. Use Kibana's `Stack Management > Saved Objects > Import` to import the `.ndjson` file.
 
-### Deploy the Prometheus & Grafana monitoring stack
+### Deploy the Prometheus & Grafana Monitoring Stack
 
-> Based on:
-> - [Grafana Docs - Install Grafana using Helm](https://grafana.com/docs/grafana/latest/setup-grafana/installation/helm/#install-grafana-using-helm)
+> Based on: [Grafana Docs - Install Grafana using Helm](https://grafana.com/docs/grafana/latest/setup-grafana/installation/helm/#install-grafana-using-helm)
 
-- Prometheus is responsible for serving metrics and setting up scrape targets. 
-- Grafana uses the Prometheus data source to visualize metrics as dashboards and could also be used to set up alerting based on set thresholds. 
-- The elasticsearch-exporter enables scraping the ES cluster for key metrics.
+- [Prometheus](http://prometheus.io) is responsible for serving metrics and setting up scrape targets. 
+- [Grafana](https://grafana.com/docs/grafana/latest/fundamentals/) uses the Prometheus data source to visualize metrics as dashboards and could also be used to set up alerting based on set thresholds. 
+- The [elasticsearch-exporter](https://github.com/prometheus-community/elasticsearch_exporter) enables scraping the ES cluster for key metrics.
 
 ```bash
 # Prometheus
@@ -205,6 +216,8 @@ helm install elasticsearch-exporter prometheus-community/prometheus-elasticsearc
 
 This solution is far from perfect. Here's a couple of things I'd love to add here someday:
 
-- [ ] AWS Cloud Controller Manager – to replace k3s' ServiceLB and provision ELB for a production-ready external cluster access via external domains
+- [ ] [AWS Cloud Controller Manager](https://cloud-provider-aws.sigs.k8s.io/#aws-cloud-controller-manager) – to replace k3s' ServiceLB and provision ELB for a production-ready external cluster access via external domains
 - [ ] Persistent storage (like EBS) for ElasticSearch, Prometheus and Grafana
 - [ ] 100% IaC - ELK PoC deploys as code and is configured with no human intervention
+  - [ ] k3s installation with Ansible
+  - [ ] Kustomize for deploying Helm charts
