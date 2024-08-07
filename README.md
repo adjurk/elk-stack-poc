@@ -16,13 +16,14 @@ Goal: Deploy a sample ELK (ElasticSearch, Logstash, Kibana) stack on AWS with as
   	- [ ] Metrics enabled
   - [x] ElasticSearch
   - [x] Logstash
-  	- [ ] Blacklist/Transform logs
+  	- [x] Blacklist/Transform logs
   - [x] Kibana
   	- [x] Dashboards (template must be in repo)
   - [ ] Grafana
-  	- [ ] Fluent Bit dashboard imported/in repo
+  	- [ ] ELK imported/in repo
   - [ ] Prometheus
-	- [ ] Configured with Packer
+    - [ ] Node Exporter
+    - [ ] ELK Exporter
 - Terraform
   - [x] EC2 Launch Template
   - [x] Basic VPC setup
@@ -47,8 +48,24 @@ Goal: Deploy a sample ELK (ElasticSearch, Logstash, Kibana) stack on AWS with as
 
 ## Prerequisites
 
-- 
+- An AWS account with IAM permissions capable of provisioning resources defined in the infra directory
 
 ## Running
 
 ### Deploy base AWS resources
+
+```bash
+cd infra
+# Initialize the backend & provider
+terraform init
+# Add your IP to tfvars which will be applied to an Ingress Rules for the EC2 Security Group
+echo "ingress_allowed_ip_cidr = \""$(curl -s ip.me)"/32\"" > secret.tfvars
+# Run a plan and check what resources would be provisioned
+terraform plan -var-file='secret.tfvars'
+# Apply the infrastructure and wait until it's complete (should take ~2-5 min)
+terraform apply -var-file='secret.tfvars'
+```
+
+### Deploy the ELK stack with ECK Cloud on Kubernetes
+
+WIP
