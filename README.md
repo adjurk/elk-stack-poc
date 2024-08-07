@@ -57,7 +57,7 @@ Here are some of the ideas for this project:
 
 Deploying this demo boils down to:
 1. Deploying base AWS resources
-2. Installing k3s (a lightweight Kubernetes distro)
+2. Installing [k3s](https://k3s.io) (a lightweight Kubernetes distro)
 3. Deploying the ELK stack with ECK (Elastic Cloud for Kubernetes)
 4. Deploying additional monitoring with Prometheus and Grafana
 
@@ -182,7 +182,7 @@ There's a sample dashboard available in the `infra/kibana` directory. Use Kibana
 # Prometheus
 
 ## Install Prometheus Helm Chart with custom values in a new 'monitoring' namespace
-cd helm
+cd infra/helm
 helm install prometheus prometheus-community/prometheus --values prometheus-values.yaml --namespace monitoring --create-namespace
 
 # Grafana
