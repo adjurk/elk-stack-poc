@@ -1,0 +1,8 @@
+# Default values: https://raw.githubusercontent.com/prometheus-community/helm-charts/main/charts/prometheus/values.yaml
+prometheus-pushgateway:
+  enabled: false
+
+extraScrapeConfigs: |
+  - job_name: elasticsearch-exporter
+    static_configs:
+      - targets:  ["elasticsearch-exporter-prometheus-elasticsearch-exporter.elastic-stack:9108"]

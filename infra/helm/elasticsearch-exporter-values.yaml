@@ -1,0 +1,14 @@
+secretMounts:
+  - name: elastic-certs
+    secretName: eck-stack-with-logstash-eck-kibana-kb-es-ca
+    path: /ssl
+
+es:
+  uri: https://user:pass@elasticsearch-es-http:9200
+  ssl:
+    enabled: true
+    useExistingSecrets: true
+    ca:
+      path: /ssl/tls.crt
+    client:
+      enabled: false
