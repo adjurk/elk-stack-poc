@@ -126,7 +126,7 @@ ip-10-0-1-126.eu-central-1.compute.internal   Ready    control-plane,master   2d
 **Note:** As of 2024-08-07, there's a [coredns issue with default k3s installation](https://github.com/coredns/coredns/issues/3600) which results in constant warnings. There's no significant impact on the functionality of CoreDNS, but you can mitigate the warnings by applying a custom ConfigMap:
 
 ```bash
-kubectl apply -f infra/coredns-cm.yaml
+kubectl apply -f infra/kubernetes/coredns-cm.yaml
 kubectl rollout restart deployment/coredns -n kube-system
 ```
 
