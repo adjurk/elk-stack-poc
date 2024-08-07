@@ -1,0 +1,11 @@
+# Hotfix for https://github.com/coredns/coredns/issues/3600#issuecomment-2171824410
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  log.override: |
+    #
+  stub.server: |
+    #

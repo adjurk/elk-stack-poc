@@ -12,7 +12,7 @@ dnf install -y container-selinux \
 # cat /var/lib/rancher/k3s/server/node-token
 
 # Install k3s (agent node)
-# curl -sfL https://get.k3s.io | K3S_URL=https://10.0.0.12:6443 K3S_TOKEN=K105c544632b5326f421b7b94359e91aa7b2827c6dc42cc6c23c6661ad5631fced5::server:5c06a12f9a6187b6f6d2c628a3b8423d sh -
+# curl -sfL https://get.k3s.io | K3S_URL=https://10.0.1.126:6443 K3S_TOKEN=K10903540a05fda7d5e9628fbe37cc3198aa3eb8d7fe25a61fe2aca172e90d4a643::server:df0918cb8855d1cad0542aa69157250a sh -
 
 # Install k9s
 dnf install -y https://github.com/derailed/k9s/releases/download/v0.32.5/k9s_linux_amd64.rpm
@@ -21,8 +21,8 @@ dnf install -y https://github.com/derailed/k9s/releases/download/v0.32.5/k9s_lin
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 # Configure bashrc
-alias k='k3s kubectl'
-alias k9s='k9s --kubeconfig /etc/rancher/k3s/k3s.yaml'
+echo "alias k='k3s kubectl'" >> ~/.bashrc
+echo "alias k9s='k9s --kubeconfig /etc/rancher/k3s/k3s.yaml'" >> ~/.bashrc
 
 # TODO: Use manifests from a static location instead of hosted
 
