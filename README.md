@@ -150,7 +150,7 @@ helm repo update
 ## https://www.elastic.co/guide/en/cloud-on-k8s/2.13/k8s-stack-helm-chart.html#k8s-install-logstash-elasticsearch-kibana-helm
 cd infra/helm
 helm install eck-stack-with-logstash elastic/eck-stack \
-    --values eck-values.yaml -n elastic-stack --create-namespace
+    --values eck-values.yaml --version 0.11.0 -n elastic-stack --create-namespace
 ```
 
 After installing ELK, you can use a port forward as [a workaround](#wishlist) for accessing Kibana:
@@ -183,13 +183,13 @@ There's a sample dashboard available in the `infra/kibana` directory. Use Kibana
 
 ## Install Prometheus Helm Chart with custom values in a new 'monitoring' namespace
 cd infra/helm
-helm install prometheus prometheus-community/prometheus --values prometheus-values.yaml --namespace monitoring --create-namespace
+helm install prometheus prometheus-community/prometheus --values prometheus-values.yaml --version 25.25.0 --namespace monitoring --create-namespace
 
 # Grafana
 
 ## Install Grafana with default values
 ## WARNING: default Grafana values result in loss of data when a Pod goes down
-helm install grafana grafana/grafana --namespace monitoring
+helm install grafana grafana/grafana --version 8.4.1 --namespace monitoring
 
 ## Get 'admin' user password
 kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
@@ -209,7 +209,7 @@ Before installing the elasticsearch-exporter, make sure to provide `user` and `p
 # elasticsearch-exporter
 
 ## Install elasticsearch-exporter with custom values
-helm install elasticsearch-exporter prometheus-community/prometheus-elasticsearch-exporter --namespace elastic-stack --values elasticsearch-exporter-values.yaml
+helm install elasticsearch-exporter prometheus-community/prometheus-elasticsearch-exporter --version 6.2.0 --namespace elastic-stack --values elasticsearch-exporter-values.yaml
 ```
 
 ## Wishlist
